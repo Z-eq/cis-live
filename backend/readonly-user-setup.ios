@@ -1,0 +1,47 @@
+! ============================================================
+! CISCO IOS-XE — READ-ONLY USER SETUP
+! Run these commands on each switch (config mode)
+! This user can ONLY run show commands — cannot change anything
+! ============================================================
+
+! 1. Create a privilege level 1 user (lowest = show commands only)
+username readonly privilege 1 secret YOUR_PASSWORD_HERE
+
+! 2. Create a named privilege view that limits to show commands only
+!    (Alternative approach — use either this OR privilege level 1)
+parser view READONLY-VIEW
+ secret YOUR_VIEW_SECRET_HERE
+ commands exec include show
+ commands exec include exit
+ commands exec include logout
+
+! 3. Apply the view to the user (optional, privilege 1 is usually enough)
+username readonly view READONLY-VIEW secret YOUR_PASSWORD_HERE
+
+! 4. Lock down privilege level 1 — deny any config access
+privilege exec level 1 show
+
+! 5. Set VTY lines to use local auth and set exec timeout
+line vty 0 15
+ login local
+ exec-timeout 5 0
+ transport input ssh
+ privilege level 1
+
+! 6. Disable the ability to enter enable mode for this user
+!    (privilege 1 users cannot run 'enable' to get to level 15)
+
+! 7. Verify SSH is enabled on the switch
+ip ssh version 2
+crypto key generate rsa modulus 2048
+
+! ============================================================
+! TEST — log in as readonly and confirm these work:
+!   show interfaces status        ✓
+!   show power inline             ✓
+!   show interfaces               ✓
+!   show version                  ✓
+!   show mac address-table        ✓
+!   configure terminal            ✗ (should be denied)
+!   no shutdown                   ✗ (should be denied)
+! ============================================================

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "SW-CORE-01",
+    "host": "192.168.1.1",
+    "location": "Server Room A",
+    "model": "C9300-48P"
+  },
+  {
+    "name": "SW-ACCESS-02",
+    "host": "192.168.1.2",
+    "location": "Floor 2 - East Wing",
+    "model": "C9300-48P"
+  },
+  {
+    "name": "SW-ACCESS-03",
+    "host": "192.168.1.3",
+    "location": "Floor 3 - West Wing",
+    "model": "C9300-48T"
+  },
+  {
+    "name": "SW-DIST-01",
+    "host": "192.168.1.10",
+    "location": "Distribution - Comms Room B",
+    "model": "C9300-48P"
+  }
+]
